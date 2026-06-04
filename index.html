@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benimle Tekrar Olur Musun Nehir? ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4d79;
+            --primary-hover: #ff1a53;
+            --bg-dark: #080710;
+            --card-bg: rgba(255, 255, 255, 0.06);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-color: #ffffff;
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #050515 0%, #100b26 50%, #1a0933 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Yıldızlı Arka Plan */
+        .stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Müzik Çalar Butonu */
+        .music-player {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            padding: 10px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+        }
+
+        .music-player:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .music-icon {
+            font-size: 20px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .music-text {
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Cam Efekti Kartı */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 550px;
+            text-align: center;
+            perspective: 1000px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 45px 30px;
+            box-shadow: var(--shadow);
+            transform: translateZ(0);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card.hidden {
+            opacity: 0;
+            transform: scale(0.8) rotateX(10deg);
+            pointer-events: none;
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 2.2rem;
+            line-height: 1.3;
+            margin-bottom: 35px;
+            background: linear-gradient(45deg, #fff, #ffccd5, #ff4d79);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(255, 77, 121, 0.15);
+        }
+
+        /* Butonlar */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            min-height: 70px;
+            position: relative;
+        }
+
+        .btn {
+            padding: 14px 36px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #ff4d79 0%, #e6005c 100%);
+            color: white;
+            position: relative;
+            z-index: 5;
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(255, 77, 121, 0.4);
+        }
+
+        .btn-no {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s;
+            position: relative;
+            z-index: 4;
+        }
+
+        /* Aşk İtirafı Ekranı */
+        .love-confession {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+
+        .love-confession.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .love-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 77, 121, 0.8), 0 0 40px rgba(255, 77, 121, 0.4);
+            animation: heartBeat 1.5s infinite;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Fotoğraf Galerisi Ekranı */
+        .gallery-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 30;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, rgba(20, 10, 35, 0.95) 0%, rgba(5, 5, 15, 0.98) 100%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px;
+        }
+
+        .gallery-container.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .gallery-header {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .gallery-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: #ffccd5;
+            text-shadow: 0 0 10px rgba(255, 77, 121, 0.5);
+            margin-bottom: 5px;
+        }
+
+        .gallery-subtitle {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Slayt Gösterisi */
+        .slideshow-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            height: 480px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 480px) {
+            .slideshow-wrapper {
+                height: 380px;
+            }
+            .love-text {
+                font-size: 2.8rem;
+            }
+            h1 {
+                font-size: 1.7rem;
+            }
+        }
+
+        .slide-track {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-item.active {
+            opacity: 1;
+            transform: scale(1);
+            z-index: 2;
+        }
+
+        .slide-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: zoom-in;
+            transition: transform 0.5s ease;
+        }
+
+        .slide-img:hover {
+            transform: scale(1.03);
+        }
+
+        /* Galeri Kontrolleri */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 77, 121, 0.8);
+            border-color: transparent;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev-btn {
+            left: 15px;
+        }
+
+        .next-btn {
+            right: 15px;
+        }
+
+        /* Nokta Göstergeleri */
+        .dot-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: var(--primary);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Kalp Yağmuru */
+        .heart-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 15;
+            overflow: hidden;
+        }
+
+        .falling-heart {
+            position: absolute;
+            color: var(--primary);
+            animation: fall linear infinite;
+            filter: drop-shadow(0 2px 5px rgba(255, 77, 121, 0.3));
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-50px) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.9;
+            }
+            90% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Zoom Modalı (Büyütme) */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 85vh;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .lightbox.active .lightbox-img {
+            transform: scale(1);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            color: white;
+            font-size: 35px;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 77, 121, 0.8);
+            transform: rotate(90deg);
+        }
+
+        /* Kalp Atışı Animasyonu */
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.1); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.1); }
+            70% { transform: scale(1); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Arka Plan Yıldızları -->
+    <div class="stars-container" id="stars"></div>
+
+    <!-- Müzik Alanı -->
+    <div class="music-player" id="musicPlayer">
+        <span class="music-icon">🎵</span>
+        <span class="music-text">Müziği Oynat</span>
+    </div>
+    <audio id="romanticMusic" loop>
+        <!-- Kullanıcı buraya kendi şarkısını ekleyebilir -->
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Kalp Yağmuru Alanı -->
+    <div class="heart-rain" id="heartRain"></div>
+
+    <!-- Ana Teklif Kartı -->
+    <div class="container" id="cardContainer">
+        <div class="card" id="mainCard">
+            <h1>BENİMLE TEKRAR OLUR MUSUN NEHİR? ❤️</h1>
+            <div class="btn-group">
+                <button class="btn btn-yes" id="btnYes">EVET ❤️</button>
+                <button class="btn btn-no" id="btnNo">HAYIR 💔</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seni Seviyorum İtiraf Ekranı -->
+    <div class="love-confession" id="loveConfession">
+        <div class="love-text">Seni Seviyorum Nehir ❤️</div>
+    </div>
+
+    <!-- Fotoğraf Galerisi -->
+    <div class="gallery-container" id="galleryContainer">
+        <div class="gallery-header">
+            <h2 class="gallery-title">Bizim Hikayemiz ✨</h2>
+            <p class="gallery-subtitle">Anılarımız ve Sevgimiz</p>
+        </div>
+        <div class="slideshow-wrapper">
+            <button class="nav-btn prev-btn" id="prevBtn">❮</button>
+            <div class="slide-track" id="slideTrack">
+                <!-- Fotoğraflar JavaScript ile yüklenecek -->
+            </div>
+            <button class="nav-btn next-btn" id="nextBtn">❯</button>
+        </div>
+        <div class="dot-indicators" id="dotIndicators">
+            <!-- Noktalar JavaScript ile yüklenecek -->
+        </div>
+    </div>
+
+    <!-- Büyütülmüş Fotoğraf Modalı (Lightbox) -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-close" id="lightboxClose">&times;</div>
+        <img class="lightbox-img" id="lightboxImg" src="" alt="Büyütülmüş Fotoğraf">
+    </div>
+
+    <script>
+        // FOTOĞRAFLAR DİZİSİ
+        // Arda ve Nehir fotoğraflarını buraya ekleyebilirler.
+        const photos = [
+            "foto1.jpg",
+            "foto2.jpg",
+            "foto3.jpg",
+            "foto4.jpg",
+            "foto5.jpg"
+        ];
+
+        // Yıldızları oluşturma
+        function createStars() {
+            const container = document.getElementById('stars');
+            const count = 120;
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDuration = `${2 + Math.random() * 4}s`;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                container.appendChild(star);
+            }
+        }
+        createStars();
+
+        // Müzik Çalar İşlemleri
+        const musicPlayer = document.getElementById('musicPlayer');
+        const romanticMusic = document.getElementById('romanticMusic');
+        const musicText = musicPlayer.querySelector('.music-text');
+        const musicIcon = musicPlayer.querySelector('.music-icon');
+        let musicPlaying = false;
+
+        musicPlayer.addEventListener('click', () => {
+            if (!musicPlaying) {
+                romanticMusic.play().then(() => {
+                    musicText.innerText = "Müziği Durdur";
+                    musicIcon.style.animation = "pulse 1s infinite";
+                    musicPlaying = true;
+                }).catch(err => {
+                    console.log("Müzik çalınamadı. Lütfen bir kaynak belirleyin.");
+                    alert("Arka planda müzik çalması için 'music.mp3' dosyasını bu sitenin olduğu klasöre eklemelisiniz. (Şu an müzik dosyası eksik olduğu için sessiz modda devam ediliyor)");
+                });
+            } else {
+                romanticMusic.pause();
+                musicText.innerText = "Müziği Oynat";
+                musicIcon.style.animation = "none";
+                musicPlaying = false;
+            }
+        });
+
+        // HAYIR Butonunun Kaçma Davranışı
+        const btnNo = document.getElementById('btnNo');
+
+        function moveButton() {
+            const btnWidth = btnNo.offsetWidth;
+            const btnHeight = btnNo.offsetHeight;
+            
+            // Ekranın orta bölgesinde (genişlik ve yüksekliğin %25 ile %75'i arasında) kalmasını sağlıyoruz
+            const minX = window.innerWidth * 0.25;
+            const maxX = window.innerWidth * 0.75 - btnWidth;
+            const minY = window.innerHeight * 0.25;
+            const maxY = window.innerHeight * 0.75 - btnHeight;
+            
+            // Rastgele yeni konumlar (orta bölge sınırlarında)
+            let newX = minX + Math.random() * (maxX - minX);
+            let newY = minY + Math.random() * (maxY - minY);
+            
+            btnNo.style.position = 'fixed';
+            btnNo.style.left = `${newX}px`;
+            btnNo.style.top = `${newY}px`;
+        }
+
+        btnNo.addEventListener('mousedown', moveButton);
+        btnNo.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveButton();
+        });
+        btnNo.addEventListener('click', (e) => {
+            e.preventDefault();
+            moveButton();
+        });
+
+        // Kalp Yağmuru Animasyonu
+        function startHeartRain() {
+            const container = document.getElementById('heartRain');
+            const hearts = ['❤️', '💖', '💝', '💕', '💗'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'falling-heart';
+                heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.fontSize = `${15 + Math.random() * 25}px`;
+                heart.style.animationDuration = `${3 + Math.random() * 4}s`;
+                container.appendChild(heart);
+                
+                // Animasyon bitince temizle
+                setTimeout(() => {
+                    heart.remove();
+                }, 7000);
+            }, 150);
+        }
+
+        // EVET Butonuna Tıklama Davranışı
+        const btnYes = document.getElementById('btnYes');
+        const mainCard = document.getElementById('mainCard');
+        const loveConfession = document.getElementById('loveConfession');
+        const galleryContainer = document.getElementById('galleryContainer');
+
+        btnYes.addEventListener('click', () => {
+            // İlk ekran kaybolsun
+            mainCard.classList.add('hidden');
+            
+            // Eğer müzik çalmaya başlamamışsa otomatik başlatmayı dene
+            if (!musicPlaying) {
+                romanticMusic.play().then(() => {
+                    musicText.innerText = "Müziği Durdur";
+                    musicPlaying = true;
+                }).catch(() => {});
+            }
+
+            // Arka planı daha romantik yap
+            document.body.style.transition = "background 3s ease";
+            document.body.style.background = "linear-gradient(135deg, #15050f 0%, #2b0b1a 50%, #400922 100%)";
+
+            // Kalp yağmuru başlasın
+            startHeartRain();
+
+            // "Seni Seviyorum Nehir ❤️" yazısı belirsin
+            setTimeout(() => {
+                loveConfession.classList.add('active');
+            }, 600);
+
+            // 3 saniye sonra (itiraftan 3 saniye sonra, toplamda ~3.6s sonra) fotoğraf galerisi açılsın
+            setTimeout(() => {
+                loveConfession.classList.remove('active');
+                setTimeout(() => {
+                    galleryContainer.classList.add('active');
+                    startSlideshow();
+                }, 800);
+            }, 3600);
+        });
+
+        // Galeri İşlemleri
+        const slideTrack = document.getElementById('slideTrack');
+        const dotIndicators = document.getElementById('dotIndicators');
+        let currentSlide = 0;
+        let slideInterval;
+
+        // Galeri Yapısını Kurma
+        function buildGallery() {
+            slideTrack.innerHTML = '';
+            dotIndicators.innerHTML = '';
+
+            photos.forEach((src, index) => {
+                // Slayt oluştur
+                const slide = document.createElement('div');
+                slide.className = `slide-item ${index === 0 ? 'active' : ''}`;
+                
+                const img = document.createElement('img');
+                img.className = 'slide-img';
+                img.src = src;
+                img.alt = `Anı ${index + 1}`;
+                
+                // Eğer fotoğraf yüklenemezse romantik bir görsel placeholder göster
+                img.onerror = function() {
+                    this.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none"><rect width="100" height="100" fill="%232b0b1a"/><path d="M50 30 C35 10, 10 25, 50 80 C90 25, 65 10, 50 30 Z" fill="%23ff4d79"/></svg>`;
+                };
+                
+                slide.appendChild(img);
+                slideTrack.appendChild(slide);
+
+                // Nokta oluştur
+                const dot = document.createElement('div');
+                dot.className = `dot ${index === 0 ? 'active' : ''}`;
+                dot.addEventListener('click', () => {
+                    goToSlide(index);
+                    resetAutoplay();
+                });
+                dotIndicators.appendChild(dot);
+
+                // Büyütme (Lightbox) Etkinliği
+                img.addEventListener('click', () => {
+                    openLightbox(src, img.src);
+                });
+            });
+        }
+
+        buildGallery();
+
+        function showSlide(index) {
+            const slides = document.querySelectorAll('.slide-item');
+            const dots = document.querySelectorAll('.dot');
+            
+            if (slides.length === 0) return;
+
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+
+            currentSlide = (index + slides.length) % slides.length;
+
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            nextSlide();
+            resetAutoplay();
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            prevSlide();
+            resetAutoplay();
+        });
+
+        // Otomatik Geçiş
+        function startSlideshow() {
+            slideInterval = setInterval(nextSlide, 3500);
+        }
+
+        function resetAutoplay() {
+            clearInterval(slideInterval);
+            startSlideshow();
+        }
+
+        // Lightbox (Büyütme)
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxClose = document.getElementById('lightboxClose');
+
+        function openLightbox(originalSrc, fallbackSrc) {
+            lightboxImg.src = originalSrc;
+            lightboxImg.onerror = function() {
+                this.src = fallbackSrc;
+            };
+            lightbox.classList.add('active');
+        }
+
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
