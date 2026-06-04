@@ -548,11 +548,11 @@
         // FOTOĞRAFLAR DİZİSİ
         // Arda ve Nehir fotoğraflarını buraya ekleyebilirler.
         const photos = [
-            "foto1.jpg",
-            "foto2.jpg",
-            "foto3.jpg",
-            "foto4.jpg",
-            "foto5.jpg"
+            "WhatsApp Image 2026-06-04 at 13.23.47.jpeg",
+            "WhatsApp Image 2026-06-04 at 13.24.07.jpeg",
+            "WhatsApp Image 2026-06-04 at 13.24.15.jpeg",
+            "WhatsApp Image 2026-06-04 at 13.24.30.jpeg",
+            "WhatsApp Image 2026-06-04 at 13.25.08.jpeg"
         ];
 
         // Yıldızları oluşturma
@@ -606,15 +606,20 @@
             const btnWidth = btnNo.offsetWidth;
             const btnHeight = btnNo.offsetHeight;
             
-            // Ekranın orta bölgesinde (genişlik ve yüksekliğin %25 ile %75'i arasında) kalmasını sağlıyoruz
-            const minX = window.innerWidth * 0.25;
-            const maxX = window.innerWidth * 0.75 - btnWidth;
-            const minY = window.innerHeight * 0.25;
-            const maxY = window.innerHeight * 0.75 - btnHeight;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
             
-            // Rastgele yeni konumlar (orta bölge sınırlarında)
-            let newX = minX + Math.random() * (maxX - minX);
-            let newY = minY + Math.random() * (maxY - minY);
+            // Butonun ortalarda (merkeze yakın) kalmasını sağlamak için maksimum sapma limitleri
+            const maxOffsetX = Math.min(window.innerWidth * 0.2, 120);
+            const maxOffsetY = Math.min(window.innerHeight * 0.2, 100);
+            
+            // Merkezin etrafında rastgele bir konum
+            let newX = centerX - (btnWidth / 2) + (Math.random() * 2 - 1) * maxOffsetX;
+            let newY = centerY - (btnHeight / 2) + (Math.random() * 2 - 1) * maxOffsetY;
+            
+            // Ekran sınırlarının dışına taşmasını engellemek için güvenlik sınırlaması
+            newX = Math.max(10, Math.min(window.innerWidth - btnWidth - 10, newX));
+            newY = Math.max(10, Math.min(window.innerHeight - btnHeight - 10, newY));
             
             btnNo.style.position = 'fixed';
             btnNo.style.left = `${newX}px`;
